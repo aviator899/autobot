@@ -34,6 +34,16 @@ function change_mac() {
     echo -e "${GREEN}[+] MAC address successfully spoofed!${NC}"
 }
 
+function revert_mac() {
+    echo -e "\n${YELLOW}[*] Reverting MAC Address...${NC}"
+    read -p "Enter interface (e.g., wlan0): " IFACE
+    if [[ -z "$IFACE" ]]; then return; fi
+
+    echo -e "${YELLOW}[*] Resetting $IFACE to original MAC...${NC}"
+    macchanger -p $IFACE
+    echo -e "${GREEN}[+] MAC address successfully reverted!${NC}"
+}
+
 function launch_anonsurf() {
     echo -e "\n${YELLOW}[*] Launching Anonsurf...${NC}"
     if command -v anonsurf &> /dev/null; then
@@ -41,6 +51,16 @@ function launch_anonsurf() {
         echo -e "${GREEN}[+] Anonsurf started! All traffic is now routed through Tor.${NC}"
     else
         echo -e "${RED}[!] Anonsurf not found. Please install it.${NC}"
+    fi
+}
+
+function stop_anonsurf() {
+    echo -e "\n${YELLOW}[*] Stopping Anonsurf...${NC}"
+    if command -v anonsurf &> /dev/null; then
+        anonsurf stop
+        echo -e "${GREEN}[+] Anonsurf stopped! Traffic returned to normal.${NC}"
+    else
+        echo -e "${RED}[!] Anonsurf not found.${NC}"
     fi
 }
 
@@ -56,15 +76,19 @@ function proxy_status() {
 
 banner
 echo -e "1) Change MAC Address"
-echo -e "2) Launch Anonsurf"
-echo -e "3) Check Proxy Status"
+echo -e "2) Revert MAC Address"
+echo -e "3) Launch Anonsurf"
+echo -e "4) Stop Anonsurf"
+echo -e "5) Check Proxy Status"
 echo -e "0) Return to Main Menu"
 echo -e "\nChoose an option:"
 read OPT
 
 case $OPT in
     1) change_mac ;;
-    2) launch_anonsurf ;;
-    3) proxy_status ;;
+    2) revert_mac ;;
+    3) launch_anonsurf ;;
+    4) stop_anonsurf ;;
+    5) proxy_status ;;
     *) echo -e "Returning..." ;;
 esac
