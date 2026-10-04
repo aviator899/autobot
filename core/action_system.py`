@@ -24,8 +24,6 @@ class ActionSystem:
             "steps": steps,
             "parameters": parameters
         }
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
         with open(self.storage_path, 'w') as f:
             json.dump(self.actions, f, indent=4)
 

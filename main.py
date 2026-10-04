@@ -16,9 +16,12 @@ class AutobotTUI:
         self.running = True
 
     def display_banner(self):
-        with open("assets/banner.txt", "r") as f:
-            banner = f.read()
-        console.print(Panel(banner, style="bold cyan", expand=False, justify="center"))
+        try:
+            with open("assets/banner.txt", "r") as f:
+                banner = f.read()
+            console.print(Panel(banner, style="bold cyan", expand=False, justify="center"))
+        except FileNotFoundError:
+            console.print(Panel("[bold cyan]AUTOBOT v2.0[/bold cyan]", expand=False, justify="center"))
 
     def main_menu(self):
         while self.running:
@@ -55,8 +58,12 @@ class AutobotTUI:
                 self.running = False
 
     def tools_menu(self):
-        with open("config/tools.json", "r") as f:
-            tools = json.load(f)
+        try:
+            with open("config/tools.json", "r") as f:
+                tools = json.load(f)
+        except Exception as e:
+            console.print(f"[red]Error loading tools: {e}[/red]")
+            return
 
         while True:
             console.clear()
@@ -73,13 +80,11 @@ class AutobotTUI:
             tool_id = Prompt.ask("\nEnter Tool ID to launch, or a new tool to install (or 'b' to go back)")
             if tool_id == 'b': break
 
-            # Find tool command
             tool = next((t for t in tools if t['id'] == tool_id), None)
             if tool:
                 self.engine.execute(tool['command'])
                 Prompt.ask("\nPress Enter to return to menu")
             else:
-                # SMART INSTALLATION
                 if self.engine.smart_install(tool_id):
                     self.engine.execute(tool_id)
                 Prompt.ask("\nPress Enter to return to menu")
@@ -87,13 +92,13 @@ class AutobotTUI:
     def actions_menu(self):
         while True:
             console.clear()
-            actions = self.actions.list_actions()
+            actions_list = self.actions.list_actions()
 
             table = Table(title="My Custom Actions", show_header=False, box=None)
-            for i, action in enumerate(actions, 1):
+            for i, action in enumerate(actions_list, 1):
                 table.add_row(f"{i}. {action}")
-            table.add_row(f"{len(actions)+1}. [bold green]Add New Action[/bold green]")
-            table.add_row(f"{len(actions)+2}. [bold red]Back[/bold red]")
+            table.add_row(f"{len(actions_list)+1}. [bold green]Add New Action[/bold green]")
+            table.add_row(f"{len(actions_list)+2}. [bold red]Back[/bold red]")
 
             console.print(Panel(table, border_style="green"))
 
@@ -101,15 +106,31 @@ class AutobotTUI:
 
             if choice.isdigit():
                 idx = int(choice)
-                if idx == len(actions) + 1:
+                if idx == len(actions_list) + 1:
                     self.add_action()
-                elif idx == len(actions) + 2:
+                elif idx == len(actions_list) + 2:
                     break
-                elif 1 <= idx <= len(actions):
-                    action_name = actions[idx-1]
-                    steps = self.actions.get_action(action_name)
+                elif 1 <= idx <= len(actions_list):
+                    action_name = actions_list[idx-1]
+                    action_data = self.actions.get_action(action_name)
+
+                    # Handle parameterization during execution
+                    steps = action_data.get("steps", [])
+                    params = action_data.get("parameters", [])
+
+                    # Create a map for the current execution
+                    replacements = {}
+                    for i, p in enumerate(params, 1):
+                        val = Prompt.ask(f"p{i} ({p})")
+                        replacements[p] = val if val.strip() != "" else p
+
+                    # Execute steps with replacements
                     for step in steps:
-                        self.engine.execute(step['command'])
+                        cmd = step['command']
+                        for original, replacement in replacements.items():
+                            cmd = cmd.replace(original, replacement)
+                        self.engine.execute(cmd)
+
                     Prompt.ask("\nAction complete. Press Enter to return")
             elif choice == 'b':
                 break
@@ -117,45 +138,52 @@ class AutobotTUI:
     def add_action(self):
         name = Prompt.ask("Enter action name")
         console.print("[bold red]RECORDING MODE ACTIVE[/bold red]")
-        console.print("Enter commands. Type 'SAVE' to finish.")
+        console.print("Enter commands. Type 'q' to finish recording commands.")
 
         steps = []
         while True:
             cmd = Prompt.ask("[bold blue]Command[/bold blue]")
-            if cmd.upper() == 'SAVE': break
+            if cmd.lower() == 'q': break
             if cmd:
                 steps.append({"command": cmd, "type": "shell"})
 
-        self.actions.save_action(name, steps)
+        # Parameterization Phase
+        parameters = []
+        console.print("\n[bold yellow]Parameterization Phase[/bold yellow]")
+        console.print("Enter strings you want to parameterize (e.g., the IP address).")
+        console.print("Type 'save' to finish and save the action.")
+
+        while True:
+            param = Prompt.ask("[bold blue]Parameter[/bold blue]")
+            if param.lower() == 'save': break
+            if param:
+                parameters.append(param)
+
+        self.actions.save_action(name, steps, parameters)
         console.print(f"[green]Action '{name}' saved successfully![/green]")
 
     def web_menu(self):
         console.print("[yellow]Loading Web Security Module...[/yellow]")
-        # Execute the bash module via the engine
         self.engine.run_bash_module("modules/web/web_core.sh")
         Prompt.ask("\nPress Enter to return to main menu")
 
     def anonymity_menu(self):
         console.print("[yellow]Loading Anonymity & Privacy Module...[/yellow]")
-        # Execute the bash module via the engine
         self.engine.run_bash_module("modules/anonymity/privacy.sh")
         Prompt.ask("\nPress Enter to return to main menu")
 
     def wireless_menu(self):
         console.print("[yellow]Loading Wireless Security Module...[/yellow]")
-        # Execute the bash module via the engine
         self.engine.run_bash_module("modules/wireless/wireless_core.sh")
         Prompt.ask("\nPress Enter to return to main menu")
 
     def network_menu(self):
         console.print("[yellow]Loading Network & MITM Module...[/yellow]")
-        # Execute the bash module via the engine
         self.engine.run_bash_module("modules/network/network_core.sh")
         Prompt.ask("\nPress Enter to return to main menu")
 
     def exploitation_menu(self):
         console.print("[yellow]Loading Exploitation Framework Module...[/yellow]")
-        # Execute the bash module via the engine
         self.engine.run_bash_module("modules/exploitation/exploit_core.sh")
         Prompt.ask("\nPress Enter to return to main menu")
 
