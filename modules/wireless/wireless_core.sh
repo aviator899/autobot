@@ -34,24 +34,35 @@ function monitor_mode() {
     fi
 }
 
-function launch_wifite() {
-    echo -e "\n${YELLOW}[*] Launching WiFite...${NC}"
-    if command -v wifite &> /dev/null; then
-        wifite
+function launch_aircrack() {
+    echo -e "\n${YELLOW}[*] Launching Aircrack-ng...${NC}"
+    if command -v aircrack-ng &> /dev/null; then
+        aircrack-ng
     else
-        echo -e "${RED}[!] WiFite not installed!${NC}"
+        echo -e "${RED}[!] Aircrack-ng not installed!${NC}"
+    fi
+}
+
+function launch_sparrow() {
+    echo -e "\n${YELLOW}[*] Launching Sparrow WiFi...${NC}"
+    if command -v sparrow-wifi &> /dev/null; then
+        sparrow-wifi
+    else
+        echo -e "${RED}[!] Sparrow-WiFi not installed!${NC}"
     fi
 }
 
 banner
 echo -e "1) Monitor Mode Control"
-echo -e "2) Launch WiFite"
+echo -e "2) Launch Aircrack-ng"
+echo -e "3) Launch Sparrow-WiFi"
 echo -e "0) Return to Main Menu"
 echo -e "\nChoose an option:"
 read OPT
 
 case $OPT in
     1) monitor_mode ;;
-    2) launch_wifite ;;
+    2) launch_aircrack ;;
+    3) launch_sparrow ;;
     *) echo -e "Returning..." ;;
 esac

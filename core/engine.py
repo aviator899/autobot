@@ -87,8 +87,8 @@ class Engine:
 
     def smart_install(self, tool_id: str):
         """
-        Tries to install a tool using APT, and if that fails,
-        attempts to find it on GitHub.
+        Tries to install a tool using APT.
+        If it fails, it informs the user to find the GitHub repo manually.
         """
         import subprocess
         print(f"\n[*] Attempting to install {tool_id}...")
@@ -100,15 +100,8 @@ class Engine:
             print(f"[+] {tool_id} installed successfully via APT!")
             return True
         except subprocess.CalledProcessError:
-            print(f"[-] APT installation failed for {tool_id}. Trying GitHub...")
-
-        # Try GitHub (Simplified: search for the tool name in a common format)
-        # In a real scenario, we'd use the GitHub API, but for a script:
-        try:
-            repo_url = f"https://github.com/{tool_id}"
-            subprocess.run(['git', 'clone', repo_url], check=True)
-            print(f"[+] {tool_id} cloned from GitHub successfully!")
-            return True
-        except subprocess.CalledProcessError:
-            print(f"[!] Could not find {tool_id} on APT or GitHub.")
+            print(f"[-] APT installation failed for {tool_id}.")
+            print(f"\n[!] {tool_id} is not in the Kali database.")
+            print(f"Please find the official GitHub repository and clone it manually using:")
+            print(f"    git clone <repository-url>")
             return False

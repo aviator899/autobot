@@ -7,13 +7,6 @@
     "description": "Network discovery and security auditing"
   },
   {
-    "id": "wifite",
-    "name": "WiFite",
-    "category": "wireless",
-    "command": "wifite",
-    "description": "Automated wireless attack tool"
-  },
-  {
     "id": "sqlmap",
     "name": "SQLMap",
     "category": "web",
@@ -26,5 +19,54 @@
     "category": "exploitation",
     "command": "msfconsole",
     "description": "Exploitation framework"
+  },
+  {
+    "id": "bettercap",
+    "name": "Bettercap",
+    "category": "network",
+    "command": "bettercap",
+    "description": "The Swiss Army knife for network attacks"
+  },
+  {
+    "id":,
+    "name": "Dirb",
+    "category": "web",
+    "command": "dirb",
+    "description": "Web content scanner"
+  },
+  {
+    "id": "gobuster",
+    "name": "Gobuster",
+    "category": "web",
+    "command": "gobuster",
+    "description": "URI and DNS brute-forcing tool"
+  },
+  {
+    "id": "aircrack-ng",
+    "name": "Aircrack-ng",
+    "category": "wireless",
+    "command": "aircrack-ng",
+    "description": "Complete suite of tools to assess WiFi network security"
+  },
+  {
+    "id": "sparrow-wifi",
+    "name": "Sparrow WiFi",
+    "category": "wireless",
+    "command": "sparrow-wifi",
+    "description": "Advanced wireless auditing"
+  },
+  {
+    "id": "anonsurf",
+    "name": "Anonsurf",
+    "category": "anonymity",
+    "command": "anonsurf",
+    "description": "Route all traffic through Tor"
+  },
+  {
+    "id": "mitm6",
+    "name": "mitm6",
+    "category": "network",
+    "command": "mitm6",
+    "description": "IPv6 DNS spoofing"
   }
 ]

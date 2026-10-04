@@ -6,7 +6,7 @@
 YELLOW='\033[1;33m'
 RED='\033[1;31m'
 GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 function banner() {
     clear
@@ -18,10 +18,7 @@ function banner() {
 function change_mac() {
     echo -e "\n${YELLOW}[*] MAC Address Spoofing${NC}"
     read -p "Enter interface (e.g., wlan0): " IFACE
-    if [[ -z "$IFACE" ]]; then
-        echo -e "${RED}[!] Interface cannot be empty${NC}"
-        return
-    fi
+    if [[ -z "$IFACE" ]]; then return; fi
 
     echo -e "${YELLOW}[*] Bringing $IFACE down...${NC}"
     ip link set $IFACE down
@@ -37,6 +34,16 @@ function change_mac() {
     echo -e "${GREEN}[+] MAC address successfully spoofed!${NC}"
 }
 
+function launch_anonsurf() {
+    echo -e "\n${YELLOW}[*] Launching Anonsurf...${NC}"
+    if command -v anonsurf &> /dev/null; then
+        anonsurf start
+        echo -e "${GREEN}[+] Anonsurf started! All traffic is now routed through Tor.${NC}"
+    else
+        echo -e "${RED}[!] Anonsurf not found. Please install it.${NC}"
+    fi
+}
+
 function proxy_status() {
     echo -e "\n${YELLOW}[*] Proxychains Status${NC}"
     if command -v proxychains4 &> /dev/null; then
@@ -49,13 +56,15 @@ function proxy_status() {
 
 banner
 echo -e "1) Change MAC Address"
-echo -e "2) Check Proxy Status"
+echo -e "2) Launch Anonsurf"
+echo -e "3) Check Proxy Status"
 echo -e "0) Return to Main Menu"
 echo -e "\nChoose an option:"
 read OPT
 
 case $OPT in
     1) change_mac ;;
-    2) proxy_status ;;
+    2) launch_anonsurf ;;
+    3) proxy_status ;;
     *) echo -e "Returning..." ;;
 esac
