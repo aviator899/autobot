@@ -41,7 +41,7 @@ class AutobotTUI:
 
             console.print(Panel(table, title="[bold white]AUTOBOT v2.0 Main Menu[/bold white]", border_style="cyan", expand=False))
 
-            choice = Prompt.ask("\n[bold cyan]Select an option[/bold cyan]", choices=["1", "2", "3", "4", "5", "6", "0"])
+            choice = Prompt.ask("\n[bold cyan]Select an option[/bold cyan]", choices=["1", "2", "3", "4", "5", "6", "7", "0"])
 
             if choice == "1": self.anonymity_menu()
             elif choice == "2": self.wireless_menu()
@@ -70,7 +70,7 @@ class AutobotTUI:
 
             console.print(Panel(table, border_style="magenta"))
 
-            tool_id = Prompt.ask("\nEnter Tool ID to launch (or 'b' to go back)")
+            tool_id = Prompt.ask("\nEnter Tool ID to launch, or a new tool to install (or 'b' to go back)")
             if tool_id == 'b': break
 
             # Find tool command
@@ -79,7 +79,10 @@ class AutobotTUI:
                 self.engine.execute(tool['command'])
                 Prompt.ask("\nPress Enter to return to menu")
             else:
-                console.print("[red]Tool not found![/red]")
+                # SMART INSTALLATION
+                if self.engine.smart_install(tool_id):
+                    self.engine.execute(tool_id)
+                Prompt.ask("\nPress Enter to return to menu")
 
     def actions_menu(self):
         while True:
