@@ -28,10 +28,10 @@
     "description": "The Swiss Army knife for network attacks"
   },
   {
-    "id":,
-    "name": "Dirb",
+    "id": "dirbuster",
+    "name": "DirBuster",
     "category": "web",
-    "command": "dirb",
+    "command": "dirbuster",
     "description": "Web content scanner"
   },
   {
