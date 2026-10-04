@@ -16,12 +16,12 @@ function banner() {
 }
 
 function network_scan() {
-    echo -e "\n${YELLOW}[*] Network Scanning${NC}"
+    echo -e "\n${YELLOW}[*] Network Scanning (Service Versioning)${NC}"
     read -p "Enter Target IP/Range (e.g., 192.168.1.0/24): " TARGET
     if [[ -z "$TARGET" ]]; then return; fi
 
-    echo -e "${YELLOW}[*] Scanning $TARGET with Nmap...${NC}"
-    nmap -sP $TARGET
+    echo -e "${YELLOW}[*] Scanning $TARGET with nmap -sV...${NC}"
+    nmap -sV $TARGET
 }
 
 function mitm_setup() {
@@ -49,10 +49,20 @@ function arp_spoof() {
     fi
 }
 
+function launch_mitm6() {
+    echo -e "\n${YELLOW}[*] Launching mitm6...${NC}"
+    if command -v mitm6 &> /dev/null; then
+        mitm6
+    else
+        echo -e "${RED}[!] mitm6 not found. Install with 'apt install mitm6'${NC}"
+    fi
+}
+
 banner
-echo -e "1) Fast Network Scan"
+echo -e "1) Fast Network Scan (sV)"
 echo -e "2) MITM IP Forwarding"
 echo -e "3) Launch Bettercap (MITM)"
+echo -e "4) Launch mitm6 (IPv6 MITM)"
 echo -e "0) Return to Main Menu"
 echo -e "\nChoose an option:"
 read OPT
@@ -61,5 +71,6 @@ case $OPT in
     1) network_scan ;;
     2) mitm_setup ;;
     3) arp_spoof ;;
+    4) launch_mitm6 ;;
     *) echo -e "Returning..." ;;
 esac

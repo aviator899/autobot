@@ -33,21 +33,12 @@ function sql_injection() {
     fi
 }
 
-function directory_brute() {
-    echo -e "\n${YELLOW}[*] Directory Brute-Forcing${NC}"
-    read -p "Enter target URL: " URL
-    if [[ -z "$URL" ]]; then return; fi
-
-    echo -e "Using Gobuster for directory discovery..."
-    # Attempt to use gobuster, fallback to dirb
-    if command -v gobuster &> /dev/null; then
-        read -p "Enter wordlist path (default: /usr/share/wordlists/dirb/common.txt): " WORDLIST
-        WORDLIST=${WORDLIST:-/usr/share/wordlists/dirb/common.txt}
-        gobuster dir -u "$URL" -w "$WORDLIST"
-    elif command -v dirb &> /dev/null; then
-        dirb "$URL"
+function launch_dirbuster() {
+    echo -e "\n${YELLOW}[*] Launching DirBuster...${NC}"
+    if command -v dirbuster &> /dev/null; then
+        dirbuster
     else
-        echo -e "${RED}[!] Neither gobuster nor dirb found!${NC}"
+        echo -e "${RED}[!] DirBuster not found. Please install it via apt or GitHub.${NC}"
     fi
 }
 
@@ -57,13 +48,12 @@ function xss_check() {
     if [[ -z "$URL" ]]; then return; fi
 
     echo -e "${YELLOW}[*] Checking for common XSS vectors...${NC}"
-    # Basic check via curl for common alert(1) reflections
     curl -s "$URL?q=<script>alert(1)</script>" | grep -i "alert(1)" && echo -e "${GREEN}[+] Potential XSS found!${NC}" || echo -e "${RED}[-] No simple XSS found${NC}"
 }
 
 banner
 echo -e "1) SQL Injection (SQLMap)"
-echo -e "2) Directory Brute-Forcing"
+echo -e "2) DirBuster"
 echo -e "3) XSS Scanner"
 echo -e "0) Return to Main Menu"
 echo -e "\nChoose an option:"
@@ -71,7 +61,7 @@ read OPT
 
 case $OPT in
     1) sql_injection ;;
-    2) directory_brute ;;
+    2) launch_dirbuster ;;
     3) xss_check ;;
     *) echo -e "Returning..." ;;
 esac
