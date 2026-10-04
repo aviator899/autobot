@@ -1,9 +1,5 @@
-
-  ___      ___        ___    ___    ___  ___  ___
- /   \    /   \      /   \  /   \  /   \ |   \/   |
-/  _  \  /  _  \    /  _  \ /  _  \ /  _  \|    \   |
-|  / \  ||  / \  |  |  / \  ||  / \  ||  / \  | |    \  |
-|  \_/  ||  \_/  |  |  \_/  ||  \_/  ||  \_/  | |  |\  |
- \____/  \____/    \____/  \____/  \____/  \___/  \_|
-
-    PROFESSIONAL SECURITY ORCHESTRATION FRAMEWORK
+AAAAA  U   U  TTTTTTT  OOOOO  BBBB   OOOOO  TTTTTTT
+A   A  U   U     T     O     O B   B O     O     T
+AAAAA  U   U     T     O     O BBBB  O     O     T
+A   A  U   U     T     O     O B   B O     O     T
+A   A   UUU      T      OOOOO  BBBB   OOOOO      T
