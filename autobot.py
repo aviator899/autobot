@@ -19,9 +19,9 @@ class AutobotTUI:
         try:
             with open("assets/banner.txt", "r") as f:
                 banner = f.read()
-            console.print(Panel(banner, style="bold cyan", expand=False, justify="center"))
+            console.print(Panel(banner, style="bold cyan", expand=False))
         except FileNotFoundError:
-            console.print(Panel("[bold cyan]AUTOBOT v2.0[/bold cyan]", expand=False, justify="center"))
+            console.print(Panel("[bold cyan]AUTOBOT v2.0[/bold cyan]", expand=False))
 
     def main_menu(self):
         while self.running:
