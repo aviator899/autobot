@@ -22,4 +22,4 @@ pip3 install rich
 mkdir -p logs custom config
 
 echo -e "\n\e[1;32m[+] AUTOBOT v2.0 Installation Complete!\e[0m"
-echo -e "To start the framework: python3 main.py"
+echo -e "To start the framework: python3 autobot.py"
