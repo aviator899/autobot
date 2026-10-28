@@ -30,7 +30,7 @@ The standout feature of AUTOBOT v2.0 is the ability to record and parameterize y
 
 # Prerequisites
 - Python 3.x
-- Kali Linux (Recommended)
+- Kali Linux (Recommended not necessary)
 - Required Python Library: `rich`
 
 # Setup
@@ -46,7 +46,7 @@ The standout feature of AUTOBOT v2.0 is the ability to record and parameterize y
    ```
 3. Launch the tool:
    ```bash
-   python main.py
+   python autobot.py
    ```
 
 # Terminal Fix
